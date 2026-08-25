@@ -39,6 +39,7 @@ const seedIdeas = [
 let ideas = loadIdeas();
 let currentFilter = "all";
 let selectedIdeaId = ideas[0]?.id || null;
+let editingIdeaId = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -88,7 +89,11 @@ function ideaCard(idea) {
     <article class="idea-card">
       <div class="idea-card-header">
         <div class="idea-title">${escapeHtml(idea.title)}</div>
-        <button class="pin-btn ${idea.pinned ? "active" : ""}" data-pin="${idea.id}" title="Pin idea">${idea.pinned ? "★" : "☆"}</button>
+        <div class="idea-card-actions">
+          <button class="pin-btn ${idea.pinned ? "active" : ""}" data-pin="${idea.id}" title="Pin idea" aria-label="Pin idea">${idea.pinned ? "★" : "☆"}</button>
+          <button class="card-action" data-edit="${idea.id}" title="Edit idea" aria-label="Edit idea">Edit</button>
+          <button class="card-action delete-action" data-delete="${idea.id}" title="Delete idea" aria-label="Delete idea">Delete</button>
+        </div>
       </div>
       <div class="idea-desc">${escapeHtml(idea.description)}</div>
       <div class="idea-meta">
@@ -131,6 +136,51 @@ function bindIdeaCardActions() {
       renderAiIdeas();
     });
   });
+
+  document.querySelectorAll("[data-edit]").forEach(btn => {
+    btn.addEventListener("click", () => openEditModal(btn.dataset.edit));
+  });
+
+  document.querySelectorAll("[data-delete]").forEach(btn => {
+    btn.addEventListener("click", () => deleteIdea(btn.dataset.delete));
+  });
+}
+
+function openEditModal(id) {
+  const idea = ideas.find(item => item.id === id);
+  if (!idea) return;
+  editingIdeaId = id;
+  $("ideaModalTitle").textContent = "Edit idea";
+  $("saveIdeaBtn").textContent = "Update idea";
+  $("ideaTitle").value = idea.title;
+  $("ideaDescription").value = idea.description;
+  $("ideaCategory").value = idea.category;
+  $("ideaReminder").value = idea.reminder ? new Date(idea.reminder).toISOString().slice(0, 16) : "";
+  $("ideaTags").value = (idea.tags || []).join(", ");
+  openModal();
+}
+
+function deleteIdea(id) {
+  const idea = ideas.find(item => item.id === id);
+  if (!idea || !confirm(`Delete “${idea.title}”?`)) return;
+  ideas = ideas.filter(item => item.id !== id);
+  if (selectedIdeaId === id) selectedIdeaId = ideas[0]?.id || null;
+  saveIdeas();
+  updateStats();
+  renderIdeas();
+  renderReminders();
+  renderAiIdeas();
+}
+
+function removeReminder(id) {
+  const idea = ideas.find(item => item.id === id);
+  if (!idea) return;
+  idea.reminder = "";
+  idea.completed = false;
+  saveIdeas();
+  updateStats();
+  renderIdeas();
+  renderReminders();
 }
 
 function renderReminders() {
@@ -147,6 +197,7 @@ function renderReminders() {
           <div class="reminder-time">${escapeHtml(formatReminder(idea.reminder))}</div>
         </div>
         <span class="badge">${escapeHtml(idea.category)}</span>
+        <button class="card-action delete-action" data-remove-reminder="${idea.id}" title="Remove reminder" aria-label="Remove reminder">Remove</button>
       </div>
     `).join("")
     : `<div class="empty-state">No reminders yet. Add one when you save an idea.</div>`;
@@ -160,6 +211,10 @@ function renderReminders() {
       updateStats();
       renderReminders();
     });
+  });
+
+  document.querySelectorAll("[data-remove-reminder]").forEach(btn => {
+    btn.addEventListener("click", () => removeReminder(btn.dataset.removeReminder));
   });
 }
 
@@ -207,18 +262,41 @@ function openModal() {
 function closeModal() {
   $("ideaModal").classList.remove("show");
   $("ideaForm").reset();
+  editingIdeaId = null;
+  $("ideaModalTitle").textContent = "Save an idea";
+  $("saveIdeaBtn").textContent = "Save idea";
 }
 
 function addIdea(e) {
   e.preventDefault();
   const tags = $("ideaTags").value.split(",").map(s => s.trim()).filter(Boolean);
+  const reminder = $("ideaReminder").value ? new Date($("ideaReminder").value).toISOString() : "";
+
+  if (editingIdeaId) {
+    const idea = ideas.find(item => item.id === editingIdeaId);
+    if (!idea) return;
+    idea.title = $("ideaTitle").value.trim();
+    idea.description = $("ideaDescription").value.trim();
+    idea.category = $("ideaCategory").value;
+    idea.tags = tags;
+    idea.reminder = reminder;
+    if (!reminder) idea.completed = false;
+    saveIdeas();
+    updateStats();
+    renderIdeas();
+    renderReminders();
+    renderAiIdeas();
+    closeModal();
+    return;
+  }
+
   const idea = {
     id: crypto.randomUUID(),
     title: $("ideaTitle").value.trim(),
     description: $("ideaDescription").value.trim(),
     category: $("ideaCategory").value,
     tags,
-    reminder: $("ideaReminder").value ? new Date($("ideaReminder").value).toISOString() : "",
+    reminder,
     createdAt: new Date().toISOString(),
     pinned: false,
     completed: false
@@ -262,9 +340,35 @@ function aiResponse(action, idea) {
   return responses[action] || "Try asking me to develop the idea, suggest next steps, or propose features.";
 }
 
-function handleAi(action) {
+async function callAiService(action, idea, customPrompt = "") {
+  const prompt = customPrompt || aiResponse(action, idea);
+  const payload = {
+    action,
+    ideaTitle: idea?.title || "",
+    ideaDescription: idea?.description || "",
+    prompt
+  };
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!data.ok) {
+      throw new Error(data.reply || "AI service unavailable.");
+    }
+    return data.reply;
+  } catch (error) {
+    return `The AI service is not ready yet. Add your API key to the .env file and restart the app.\n\n${error.message}`;
+  }
+}
+
+async function handleAi(action) {
   const idea = selectedIdea();
-  addBotMessage(aiResponse(action, idea));
+  const reply = await callAiService(action, idea);
+  addBotMessage(reply);
 }
 
 document.querySelectorAll(".nav-item[data-view], [data-view]").forEach(btn => {
@@ -292,12 +396,15 @@ document.querySelectorAll("[data-ai]").forEach(btn => {
   btn.addEventListener("click", () => handleAi(btn.dataset.ai));
 });
 
-$("sendAiBtn").addEventListener("click", () => {
+$("sendAiBtn").addEventListener("click", async () => {
   const text = $("aiInput").value.trim();
   if (!text) return;
+  const idea = selectedIdea();
   addUserMessage(text);
   $("aiInput").value = "";
-  setTimeout(() => addBotMessage(`For “${selectedIdea()?.title || "your idea"}”, a useful way to explore that is to turn the thought into one clear outcome and one next action.`), 180);
+
+  const reply = await callAiService("custom", idea, text);
+  addBotMessage(reply);
 });
 
 $("aiInput").addEventListener("keydown", (e) => {
