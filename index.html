@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nail - AI-powered idea saver and reminder frontend." />
+  <title>Nail — Never lose a good idea</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div>
+          <div class="brand-name">Nail</div>
+          <div class="brand-subtitle">Ideas, remembered.</div>
+        </div>
+      </div>
+
+      <button class="primary-btn sidebar-add" id="openIdeaBtn">
+        <span>＋</span> Save Idea
+      </button>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-item" data-view="ideas"><span>✦</span> My Ideas</button>
+        <button class="nav-item" data-view="reminders"><span>◷</span> Reminders</button>
+        <button class="nav-item" data-view="ai"><span>✧</span> AI Helper</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="mini-tip">
+          <span>💡</span>
+          <div>
+            <strong>Quick thought?</strong>
+            <p>Save it before it disappears.</p>
+          </div>
+        </div>
+        <button class="nav-item" data-view="settings"><span>⚙</span> Settings</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">YOUR IDEA SPACE</p>
+          <h1 id="pageTitle">Good ideas deserve a place.</h1>
+        </div>
+        <div class="top-actions">
+          <div class="search">
+            <span>⌕</span>
+            <input id="globalSearch" type="search" placeholder="Search ideas..." />
+          </div>
+          <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">☾</button>
+          <button class="avatar">A</button>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="view active-view">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">NAIL</p>
+            <h2>Never lose a good idea again.</h2>
+            <p>Capture ideas quickly, set a reminder, and use your AI helper to turn thoughts into something bigger.</p>
+            <div class="hero-actions">
+              <button class="primary-btn" id="heroSaveBtn">＋ Save an idea</button>
+              <button class="ghost-btn" data-view="ideas">Explore ideas →</button>
+            </div>
+          </div>
+          <div class="hero-orbit">
+            <div class="orbit-core">N</div>
+            <span class="orbit-dot dot-1">✦</span>
+            <span class="orbit-dot dot-2">◷</span>
+            <span class="orbit-dot dot-3">✧</span>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">Saved ideas</span>
+            <strong id="statIdeas">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Upcoming reminders</span>
+            <strong id="statReminders">0</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Pinned ideas</span>
+            <strong id="statPinned">0</strong>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RECENT</p>
+            <h3>Recent ideas</h3>
+          </div>
+          <button class="text-btn" data-view="ideas">View all →</button>
+        </div>
+        <div id="recentIdeas" class="idea-grid"></div>
+
+        <div class="section-heading ai-heading">
+          <div>
+            <p class="eyebrow">SMART HELP</p>
+            <h3>AI Helper</h3>
+          </div>
+          <button class="text-btn" data-view="ai">Open helper →</button>
+        </div>
+        <div class="ai-banner">
+          <div class="ai-spark">✧</div>
+          <div>
+            <h4>Turn a rough thought into a clearer idea.</h4>
+            <p>Choose an idea and ask Nail to develop it, suggest next steps, or find related thoughts.</p>
+          </div>
+          <button class="primary-btn small" data-view="ai">Try AI Helper</button>
+        </div>
+      </section>
+
+      <section id="ideasView" class="view">
+        <div class="view-toolbar">
+          <div>
+            <p class="eyebrow">YOUR LIBRARY</p>
+            <h2>My Ideas</h2>
+          </div>
+          <button class="primary-btn" id="ideasSaveBtn">＋ Save idea</button>
+        </div>
+        <div class="filters">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="Personal">Personal</button>
+          <button class="filter" data-filter="Projects">Projects</button>
+          <button class="filter" data-filter="Learning">Learning</button>
+          <button class="filter" data-filter="Technology">Technology</button>
+          <button class="filter" data-filter="Creative">Creative</button>
+        </div>
+        <div id="allIdeas" class="idea-grid"></div>
+      </section>
+
+      <section id="remindersView" class="view">
+        <div class="view-toolbar">
+          <div>
+            <p class="eyebrow">DON'T FORGET</p>
+            <h2>Reminders</h2>
+          </div>
+          <button class="ghost-btn" id="clearCompletedBtn">Clear completed</button>
+        </div>
+        <div id="reminderList" class="reminder-list"></div>
+      </section>
+
+      <section id="aiView" class="view">
+        <div class="view-toolbar">
+          <div>
+            <p class="eyebrow">YOUR THOUGHT PARTNER</p>
+            <h2>AI Helper</h2>
+          </div>
+        </div>
+        <div class="ai-workspace">
+          <aside class="ai-side-panel">
+            <p class="side-title">Choose an idea</p>
+            <div id="aiIdeaList"></div>
+          </aside>
+          <div class="ai-chat">
+            <div class="chat-header">
+              <div class="ai-badge">✧</div>
+              <div>
+                <strong>Nail AI</strong>
+                <span>Idea development assistant</span>
+              </div>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+              <div class="message bot">
+                <span class="message-label">Nail AI</span>
+                Pick an idea on the left and I’ll help you develop it.
+              </div>
+            </div>
+            <div class="quick-actions">
+              <button data-ai="develop">Develop idea</button>
+              <button data-ai="steps">Give next steps</button>
+              <button data-ai="features">Suggest features</button>
+              <button data-ai="related">Find related ideas</button>
+            </div>
+            <div class="chat-input">
+              <input id="aiInput" placeholder="Ask Nail about your idea..." />
+              <button id="sendAiBtn" class="primary-btn">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="view-toolbar">
+          <div>
+            <p class="eyebrow">PREFERENCES</p>
+            <h2>Settings</h2>
+          </div>
+        </div>
+        <div class="settings-card">
+          <div>
+            <strong>Demo data</strong>
+            <p>Reset the local ideas in this frontend demo.</p>
+          </div>
+          <button class="danger-btn" id="resetBtn">Reset demo</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="ideaModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">QUICK CAPTURE</p>
+          <h3>Save an idea</h3>
+        </div>
+        <button class="close-btn" id="closeModal">×</button>
+      </div>
+      <form id="ideaForm">
+        <label>
+          Title
+          <input id="ideaTitle" required maxlength="70" placeholder="Give your idea a name..." />
+        </label>
+        <label>
+          Description
+          <textarea id="ideaDescription" required maxlength="500" placeholder="What’s the idea?"></textarea>
+        </label>
+        <div class="form-row">
+          <label>
+            Category
+            <select id="ideaCategory">
+              <option>Personal</option>
+              <option>Projects</option>
+              <option>Learning</option>
+              <option>Technology</option>
+              <option>Creative</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>
+            Reminder
+            <input id="ideaReminder" type="datetime-local" />
+          </label>
+        </div>
+        <label>
+          Tags
+          <input id="ideaTags" placeholder="e.g. python, project, security" />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="ghost-btn" id="cancelIdea">Cancel</button>
+          <button type="submit" class="primary-btn">Save idea</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+'''
