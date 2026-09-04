@@ -1,4 +1,6 @@
 const STORAGE_KEY = "nail_demo_ideas_v1";
+const THEME_KEY = "nail_theme_v1";
+const REMINDER_CHECK_INTERVAL_MS = 30000;
 
 const seedIdeas = [
   {
@@ -40,6 +42,9 @@ let ideas = loadIdeas();
 let currentFilter = "all";
 let selectedIdeaId = ideas[0]?.id || null;
 let editingIdeaId = null;
+let activeView = "dashboard";
+let lastUndo = null;
+let undoTimer = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -70,6 +75,17 @@ function formatReminder(iso) {
   }).format(date);
 }
 
+function nowLocalDateTime() {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  const tzOffsetMs = now.getTimezoneOffset() * 60000;
+  return new Date(now.getTime() - tzOffsetMs).toISOString().slice(0, 16);
+}
+
+function enforceReminderMin() {
+  $("ideaReminder").setAttribute("min", nowLocalDateTime());
+}
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (m) => ({
     "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
@@ -80,6 +96,100 @@ function updateStats() {
   $("statIdeas").textContent = ideas.length;
   $("statReminders").textContent = ideas.filter(i => i.reminder && !i.completed).length;
   $("statPinned").textContent = ideas.filter(i => i.pinned).length;
+}
+
+function playReminderTone() {
+  playTone(880, 0.36);
+}
+
+function playTone(frequency, duration) {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration - 0.01);
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + duration);
+  } catch {
+    // Ignore audio failures silently for browsers that block autoplay audio.
+  }
+}
+
+function playActionSound(isUndo = false) {
+  playTone(isUndo ? 660 : 440, 0.14);
+}
+
+function showUndoToast(message, undoAction) {
+  const toast = $("undoToast");
+  $("undoMessage").textContent = message;
+  toast.hidden = false;
+  toast.classList.add("show");
+  lastUndo = undoAction;
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => {
+    lastUndo = null;
+    toast.classList.remove("show");
+    toast.hidden = true;
+  }, 6000);
+}
+
+function undoLastAction() {
+  if (!lastUndo) return;
+  const undoAction = lastUndo;
+  lastUndo = null;
+  clearTimeout(undoTimer);
+  $("undoToast").classList.remove("show");
+  $("undoToast").hidden = true;
+  undoAction();
+  playActionSound(true);
+}
+
+function isReminderDue(idea, nowMs) {
+  if (!idea?.reminder || idea.completed) return false;
+  const reminderMs = new Date(idea.reminder).getTime();
+  if (!Number.isFinite(reminderMs) || reminderMs > nowMs) return false;
+  const alertedMs = idea.alertedAt ? new Date(idea.alertedAt).getTime() : 0;
+  return !Number.isFinite(alertedMs) || alertedMs < reminderMs;
+}
+
+function notifyDueReminders(dueIdeas) {
+  if (!dueIdeas.length) return;
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    dueIdeas.forEach(idea => {
+      new Notification("Nail Reminder", {
+        body: `${idea.title} is due now.`,
+        tag: `nail-reminder-${idea.id}`
+      });
+    });
+  } else {
+    const preview = dueIdeas.slice(0, 3).map(idea => `• ${idea.title}`).join("\n");
+    const extra = dueIdeas.length > 3 ? `\n+${dueIdeas.length - 3} more` : "";
+    alert(`Reminder due:\n${preview}${extra}`);
+  }
+
+  playReminderTone();
+}
+
+function checkDueReminders() {
+  const nowMs = Date.now();
+  const dueIdeas = ideas.filter(idea => isReminderDue(idea, nowMs));
+  if (!dueIdeas.length) return;
+
+  notifyDueReminders(dueIdeas);
+  const alertedAt = new Date().toISOString();
+  dueIdeas.forEach(idea => {
+    idea.alertedAt = alertedAt;
+  });
+  saveIdeas();
+  renderIdeas();
+  renderReminders();
 }
 
 function ideaCard(idea) {
@@ -115,7 +225,10 @@ function renderIdeas() {
     ? filtered.map(ideaCard).join("")
     : `<div class="empty-state">No ideas match your search.</div>`;
 
-  const recent = [...ideas].sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt)).slice(0, 3);
+  const recentPool = query
+    ? ideas.filter(i => `${i.title} ${i.description} ${(i.tags || []).join(" ")}`.toLowerCase().includes(query))
+    : ideas;
+  const recent = [...recentPool].sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt)).slice(0, 3);
   $("recentIdeas").innerHTML = recent.length
     ? recent.map(ideaCard).join("")
     : `<div class="empty-state">Save your first idea to see it here.</div>`;
@@ -163,6 +276,8 @@ function openEditModal(id) {
 function deleteIdea(id) {
   const idea = ideas.find(item => item.id === id);
   if (!idea || !confirm(`Delete “${idea.title}”?`)) return;
+  const removedIdea = { ...idea, tags: [...(idea.tags || [])] };
+  const removedIndex = ideas.findIndex(item => item.id === id);
   ideas = ideas.filter(item => item.id !== id);
   if (selectedIdeaId === id) selectedIdeaId = ideas[0]?.id || null;
   saveIdeas();
@@ -170,17 +285,43 @@ function deleteIdea(id) {
   renderIdeas();
   renderReminders();
   renderAiIdeas();
+  playActionSound();
+  showUndoToast("Idea deleted", () => {
+    ideas.splice(Math.min(removedIndex, ideas.length), 0, removedIdea);
+    selectedIdeaId = removedIdea.id;
+    saveIdeas();
+    updateStats();
+    renderIdeas();
+    renderReminders();
+    renderAiIdeas();
+  });
 }
 
 function removeReminder(id) {
   const idea = ideas.find(item => item.id === id);
   if (!idea) return;
+  const previousReminder = {
+    reminder: idea.reminder,
+    completed: idea.completed,
+    alertedAt: idea.alertedAt || ""
+  };
   idea.reminder = "";
   idea.completed = false;
+  idea.alertedAt = "";
   saveIdeas();
   updateStats();
   renderIdeas();
   renderReminders();
+  playActionSound();
+  showUndoToast("Reminder removed", () => {
+    const restoredIdea = ideas.find(item => item.id === id);
+    if (!restoredIdea) return;
+    Object.assign(restoredIdea, previousReminder);
+    saveIdeas();
+    updateStats();
+    renderIdeas();
+    renderReminders();
+  });
 }
 
 function renderReminders() {
@@ -238,6 +379,7 @@ function renderAiIdeas() {
 }
 
 function navigate(view) {
+  activeView = view;
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active-view"));
   $(`${view}View`).classList.add("active-view");
   document.querySelectorAll(".nav-item[data-view]").forEach(b => b.classList.toggle("active", b.dataset.view === view));
@@ -254,7 +396,36 @@ function navigate(view) {
   if (view === "ai") renderAiIdeas();
 }
 
+function applyTheme(themeName) {
+  const themes = ["dark", "light", "pro", "human"];
+  const theme = themes.includes(themeName) ? themeName : "dark";
+  document.body.classList.remove("light-theme", "pro-theme", "human-theme");
+  if (theme === "light") document.body.classList.add("light-theme");
+  if (theme === "pro") document.body.classList.add("pro-theme");
+  if (theme === "human") document.body.classList.add("human-theme");
+  localStorage.setItem(THEME_KEY, theme);
+
+  const themeBtn = $("themeBtn");
+  const labels = {
+    dark: { text: "🌙", title: "Current theme: Dark" },
+    light: { text: "☀", title: "Current theme: Light" },
+    pro: { text: "◆", title: "Current theme: Pro" },
+    human: { text: "◉", title: "Current theme: Human" }
+  };
+  themeBtn.textContent = labels[theme].text;
+  themeBtn.setAttribute("aria-label", labels[theme].title);
+  themeBtn.title = labels[theme].title;
+}
+
+function cycleTheme() {
+  const themes = ["dark", "light", "pro", "human"];
+  const current = localStorage.getItem(THEME_KEY) || "dark";
+  const next = themes[(themes.indexOf(current) + 1) % themes.length];
+  applyTheme(next);
+}
+
 function openModal() {
+  enforceReminderMin();
   $("ideaModal").classList.add("show");
   setTimeout(() => $("ideaTitle").focus(), 50);
 }
@@ -269,17 +440,35 @@ function closeModal() {
 
 function addIdea(e) {
   e.preventDefault();
+  enforceReminderMin();
+  const title = $("ideaTitle").value.trim();
+  if (!title) {
+    $("ideaTitle").setCustomValidity("Please enter a title for your idea.");
+    $("ideaTitle").reportValidity();
+    return;
+  }
+  $("ideaTitle").setCustomValidity("");
   const tags = $("ideaTags").value.split(",").map(s => s.trim()).filter(Boolean);
-  const reminder = $("ideaReminder").value ? new Date($("ideaReminder").value).toISOString() : "";
+  const reminderInput = $("ideaReminder").value;
+  const reminderDate = reminderInput ? new Date(reminderInput) : null;
+
+  if (reminderDate && reminderDate.getTime() < Date.now()) {
+    alert("Reminder must be in the future.");
+    return;
+  }
+
+  const reminder = reminderDate ? reminderDate.toISOString() : "";
 
   if (editingIdeaId) {
     const idea = ideas.find(item => item.id === editingIdeaId);
     if (!idea) return;
-    idea.title = $("ideaTitle").value.trim();
+    const previousReminder = idea.reminder;
+    idea.title = title;
     idea.description = $("ideaDescription").value.trim();
     idea.category = $("ideaCategory").value;
     idea.tags = tags;
     idea.reminder = reminder;
+    if (previousReminder !== reminder) idea.alertedAt = "";
     if (!reminder) idea.completed = false;
     saveIdeas();
     updateStats();
@@ -292,11 +481,12 @@ function addIdea(e) {
 
   const idea = {
     id: crypto.randomUUID(),
-    title: $("ideaTitle").value.trim(),
+    title,
     description: $("ideaDescription").value.trim(),
     category: $("ideaCategory").value,
     tags,
     reminder,
+    alertedAt: "",
     createdAt: new Date().toISOString(),
     pinned: false,
     completed: false
@@ -382,7 +572,14 @@ $("closeModal").addEventListener("click", closeModal);
 $("cancelIdea").addEventListener("click", closeModal);
 $("ideaForm").addEventListener("submit", addIdea);
 
-$("globalSearch").addEventListener("input", renderIdeas);
+$("globalSearch").addEventListener("input", () => {
+  const query = $("globalSearch").value.trim();
+  if (query && activeView !== "ideas") {
+    navigate("ideas");
+    return;
+  }
+  renderIdeas();
+});
 
 document.querySelectorAll(".filter").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -430,12 +627,26 @@ $("resetBtn").addEventListener("click", () => {
   renderAiIdeas();
 });
 
-$("themeBtn").addEventListener("click", () => {
-  document.body.classList.toggle("light-theme");
-  $("themeBtn").textContent = document.body.classList.contains("light-theme") ? "☀" : "☾";
+$("themeBtn").addEventListener("click", cycleTheme);
+$("undoBtn").addEventListener("click", undoLastAction);
+
+if ("Notification" in window && Notification.permission === "default") {
+  document.addEventListener("click", () => {
+    if (Notification.permission === "default") Notification.requestPermission();
+  }, { once: true });
+}
+
+setInterval(checkDueReminders, REMINDER_CHECK_INTERVAL_MS);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") checkDueReminders();
 });
+
+enforceReminderMin();
+
+applyTheme(localStorage.getItem(THEME_KEY) || "dark");
 
 updateStats();
 renderIdeas();
 renderReminders();
 renderAiIdeas();
+checkDueReminders();

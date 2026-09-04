@@ -224,8 +224,8 @@
       </div>
       <form id="ideaForm">
         <label>
-          Title
-          <input id="ideaTitle" required maxlength="70" placeholder="Give your idea a name..." />
+          Title <span class="required-label">Required</span>
+          <input id="ideaTitle" required maxlength="70" autocomplete="off" placeholder="Give your idea a name..." />
         </label>
         <label>
           Description
@@ -258,6 +258,11 @@
         </div>
       </form>
     </div>
+  </div>
+
+  <div class="undo-toast" id="undoToast" role="status" aria-live="polite" hidden>
+    <span id="undoMessage"></span>
+    <button class="undo-btn" id="undoBtn" type="button">Undo</button>
   </div>
 
   <script src="app.js"></script>

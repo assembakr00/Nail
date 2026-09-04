@@ -317,6 +317,7 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   border-radius: 18px;
   padding: 18px;
   min-height: 180px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 13px;
@@ -325,16 +326,16 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 
 .idea-card:hover { transform: translateY(-2px); border-color: rgba(155,140,255,.35); }
 
-.idea-card-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.idea-card-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; min-width: 0; }
 .idea-card-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-.idea-title { font-weight: 750; font-size: 16px; line-height: 1.3; }
+.idea-title { min-width: 0; font-weight: 750; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
 .pin-btn { background: transparent; border: 0; color: var(--muted); font-size: 17px; }
 .pin-btn.active { color: #ffd36d; }
 .card-action { border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--muted); padding: 4px 7px; font-size: 10px; }
 .card-action:hover { color: var(--text); background: var(--panel-2); }
 .delete-action { color: var(--danger); }
 
-.idea-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.idea-desc { min-width: 0; color: var(--muted); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; word-break: break-word; }
 
 .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
 .badge {
@@ -549,6 +550,55 @@ label textarea { min-height: 120px; resize: vertical; }
   color: var(--muted);
 }
 
+.required-label { color: var(--accent-2); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+
+.undo-toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  gap: 16px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 12px 12px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-2);
+  border-radius: 12px;
+  background: var(--panel-2);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.undo-toast.show { display: flex; opacity: 1; transform: translateY(0); pointer-events: auto; }
+.undo-toast.show::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 0 0 12px 12px;
+  background: var(--accent-2);
+  transform-origin: left;
+  animation: undo-countdown 6s linear forwards;
+}
+@keyframes undo-countdown { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.undo-btn {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent-2);
+  padding: 6px 10px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+.undo-btn:hover { background: var(--panel); }
+
 @media (max-width: 1020px) {
   .sidebar { width: 220px; }
   .idea-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -566,13 +616,81 @@ label textarea { min-height: 120px; resize: vertical; }
   .idea-grid { grid-template-columns: 1fr; }
   .ai-workspace { grid-template-columns: 1fr; }
   .ai-side-panel { min-height: 160px; }
+  .undo-toast { right: 16px; bottom: 16px; left: 16px; justify-content: space-between; }
 }
 
 .light-theme {
-  --bg: #f5f7fb;
+  --bg: #ffffff;
   --panel: #ffffff;
-  --panel-2: #eef1f7;
+  --panel-2: #ffffff;
   --text: #111827;
   --muted: #687387;
-  --border: rgba(17,24,39,.09);
+  --border: rgba(8, 9, 14, 0.09);
+}
+
+.light-theme .sidebar {
+  background: #ffffff;
+}
+
+.light-theme .hero-card {
+  background: #ffffff;
+}
+
+.light-theme .orbit-dot {
+  background: #ffffff;
+}
+
+.light-theme .modal-backdrop {
+  background: rgba(245, 248, 255, .72);
+}
+
+.light-theme .modal {
+  background: #ffffff;
+  box-shadow: 0 22px 80px rgba(30, 38, 52, .14);
+}
+
+.light-theme .search,
+.light-theme .icon-btn,
+.light-theme .mini-tip,
+.light-theme .stat-card,
+.light-theme .idea-card,
+.light-theme .reminder-item,
+.light-theme .ai-side-panel,
+.light-theme .ai-chat,
+.light-theme .settings-card,
+.light-theme label input,
+.light-theme label textarea,
+.light-theme label select,
+.light-theme .chat-input input,
+.light-theme .message.bot,
+.light-theme .ai-idea:hover,
+.light-theme .ai-idea.active,
+.light-theme .undo-toast {
+  background: #ffffff;
+}
+
+.pro-theme {
+  --bg: #0b1220;
+  --panel: #121c2f;
+  --panel-2: #17233b;
+  --text: #eef4ff;
+  --muted: #8ca1c7;
+  --border: rgba(150, 178, 228, .22);
+  --accent: #4f8cff;
+  --accent-2: #00c2a8;
+  --danger: #ff6f7c;
+  --shadow: 0 18px 60px rgba(8,13,24,.38);
+}
+
+.human-theme {
+  --bg: #f8f2e8;
+  --panel: #fffaf2;
+  --panel-2: #f2e9dc;
+  --text: #2d2a24;
+  --muted: #7f705f;
+  --border: rgba(73, 58, 39, .18);
+  --accent: #ca6f3d;
+  --accent-2: #4ea186;
+  --danger: #c45151;
+  --shadow: 0 16px 42px rgba(83,62,34,.12);
 }
