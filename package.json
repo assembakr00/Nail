@@ -2,10 +2,10 @@
   "name": "nail-idea-app",
   "version": "1.0.0",
   "description": "Nail is a personal idea saver with AI-powered brainstorming support.",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
   },
   "keywords": [
     "ideas",

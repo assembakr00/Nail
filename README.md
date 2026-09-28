@@ -98,16 +98,18 @@ If no key is configured yet, the app still runs in a safe fallback mode and retu
 
 ```text
 .
-├── app.js
-├── index.html
-├── style.css
-├── server.js
+├── Public/
+│   ├── app.js
+│   ├── index.html
+│   ├── style.css
+│   └── assets/
+│       └── logo.svg
+├── server/
+│   └── server.js
 ├── .env.example
 ├── .gitignore
 ├── package.json
-├── README.md
-└── assets/
-    └── logo.svg
+└── README.md
 ```
 
 ## 🧩 Planned work for a real production app
