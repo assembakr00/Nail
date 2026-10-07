@@ -33,7 +33,7 @@ You've got two ways to run Nail — pick whichever fits what you want to see:
 
 Just open the live link: **https://assembakr00.github.io/Nail/**
 
-GitHub Pages only serves static files — it can't run the Express backend (`server.js`). So the note-saving, reminders, pinning, and search all work great straight out of the box, since those run entirely in your browser. But the **AI Helper won't respond** on this link, because there's no server there to handle the `/api/chat` request it needs. If you want the AI side working, use Option 2 below.
+GitHub Pages only serves static files — it can't run the Express backend (server.js). So the note-saving, reminders, pinning, and search all work great straight out of the box, since those run entirely in your browser. But the **AI Helper won't respond** on this link, because there's no server there to handle the `/api/chat` request it needs. If you want the AI side working, use Option 2 below.
 
 ### Option 2: Run it locally (full experience, AI included 🤖)
 
@@ -130,3 +130,5 @@ localStorage is still useful for the demo, but it should not be the permanent so
 ## 📝 Notes
 
 This project is designed so you can plug in your own API key later without changing the app structure. All sensitive values should stay in `.env` and never be hardcoded into source files.
+
+              (BTW i know u guys will notice the lots of eimojis but that meei wrote everything and ofc idk how do write emjois so ai just added it looks vibecoded or unprof. but idc i like them and thx for ready se u soon!!)
