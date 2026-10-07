@@ -2,21 +2,21 @@
 
 Nail is a personal idea-saving and reminder app for capturing thoughts, organizing them by category, and using a lightweight AI helper to develop ideas further.
 
-Catch the idea. Nail it down. Build on it later. 💡
+Catch the idea. Nail it down. Build on it later.
 
-**🔗 Live demo:** https://assembakr00.github.io/Nail/ — see the note in [Try it out](#-try-it-out) before you go looking for the AI Helper there!
+** Live demo:** https://assembakr00.github.io/Nail/ — see the note in [Try it out](#-try-it-out) before you go looking for the AI Helper there!
 
 ## ✨ Features
 
-- 💾 Save and organize ideas
-- 🔍 Search and filter by category
-- 📌 Pin important ideas
-- ⏰ Add reminder dates
-- ✅ Mark reminder items as complete
-- 🤖 AI helper through a server-side API route
-- ⚡ Local browser storage for a fast demo workflow
-- ✏️ Edit and delete ideas
-- 🗑️ Remove scheduled reminders without deleting the idea
+-  Save and organize ideas
+-  Search and filter by category
+-  Pin important ideas
+-  Add reminder dates
+-  Mark reminder items as complete
+-  AI helper through a server-side API route
+-  Local browser storage for a fast demo workflow
+-  Edit and delete ideas
+-  Remove scheduled reminders without deleting the idea
 
 ## 🛠️ Tech stack
 
@@ -29,7 +29,7 @@ Catch the idea. Nail it down. Build on it later. 💡
 
 You've got two ways to run Nail — pick whichever fits what you want to see:
 
-### Option 1: GitHub Pages (fastest, but read this first ⚠️)
+### Option 1: GitHub Pages (fastest, but read this first!!!!!! ⚠️)
 
 Just open the live link: **https://assembakr00.github.io/Nail/**
 
@@ -74,9 +74,9 @@ GitHub Pages only serves static files — it can't run the Express backend (serv
    http://localhost:3000
    ```
 
-This spins up the Express server locally, so the AI Helper actually has something to talk to. 🎉
+This spins up the Express server locally, so the AI Helper actually has something to talk to.
 
-## 🔑 Environment variables
+##  Environment variables
 
 Create a `.env` file with values like:
 
@@ -88,7 +88,7 @@ OPENAI_MODEL=gpt-4o-mini
 
 > ⚠️ Do not commit your real API key. Keep `.env` local and make sure it is ignored by Git.
 
-## 🧠 API behavior
+##  API behavior
 
 The app includes a small Express backend that accepts AI requests and forwards them to the configured AI provider using your server-side API key. The browser never receives the key.
 
@@ -112,23 +112,23 @@ If no key is configured yet, the app still runs in a safe fallback mode and retu
 └── README.md
 ```
 
-## 🧩 Planned work for a real production app
+##  Planned work for a real production app
 
 The current version is a local browser demo. These are the main pieces still missing or planned before Nail becomes a complete multi-user application:
 
-- 🗄️ Database storage for ideas, reminders, AI conversations, and accounts
-- 🔐 Authentication with secure sessions and user-specific authorization
-- 👤 Login page, sign-up page, password reset, and account settings
-- 🔄 Server-side idea and reminder CRUD endpoints instead of localStorage-only persistence
-- 🚧 Custom 404 page plus consistent 4xx/5xx error pages
-- 🔔 Real scheduled notifications and reminder delivery
-- 🛡️ Input validation, rate limits, logging, monitoring, automated tests, and deployment configuration
-- 🤖 AI provider configuration, usage limits, and abuse protection
+-  Database storage for ideas, reminders, AI conversations, and accounts
+-  Authentication with secure sessions and user-specific authorization
+-  Login page, sign-up page, password reset, and account settings
+-  Server-side idea and reminder CRUD endpoints instead of localStorage-only persistence
+-  Custom 404 page plus consistent 4xx/5xx error pages
+-  Real scheduled notifications and reminder delivery
+-  Input validation, rate limits, logging, monitoring, automated tests, and deployment configuration
+-  AI provider configuration, usage limits, and abuse protection
 
 localStorage is still useful for the demo, but it should not be the permanent source of truth for a real app. A database will allow secure persistence and syncing across devices.
 
-## 📝 Notes
+## Notes
 
 This project is designed so you can plug in your own API key later without changing the app structure. All sensitive values should stay in `.env` and never be hardcoded into source files.
 
-              (BTW i know u guys will notice the lots of eimojis but that meei wrote everything and ofc idk how do write emjois so ai just added it looks vibecoded or unprof. but idc i like them and thx for ready se u soon!!)
+              (BTW i know u guys will notice the lots of Emojis and that ai wrote everything but nah idk how do write Emojis (ofc) so ai just added it looks vibecoded or unprof. but idc i like them and thx for reading see u soon!!)
