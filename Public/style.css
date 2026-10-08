@@ -8,8 +8,10 @@
   --border: rgba(255,255,255,.08);
   --accent: #9b8cff;
   --accent-2: #5eead4;
+  --accent-strong: #766fff;
   --danger: #ff6b81;
   --shadow: 0 18px 60px rgba(0,0,0,.25);
+  --button-shadow: 0 10px 25px rgba(123,112,255,.2);
 }
 
 * { box-sizing: border-box; }
@@ -80,7 +82,7 @@ button { cursor: pointer; }
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--accent), #766fff);
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: white;
   padding: 11px 16px;
   box-shadow: 0 10px 25px rgba(123,112,255,.2);
@@ -626,6 +628,7 @@ label textarea { min-height: 120px; resize: vertical; }
   --text: #111827;
   --muted: #687387;
   --border: rgba(8, 9, 14, 0.09);
+  --button-shadow: 0 10px 25px rgba(87,79,232,.18);
 }
 
 .light-theme .sidebar {
@@ -678,8 +681,10 @@ label textarea { min-height: 120px; resize: vertical; }
   --border: rgba(150, 178, 228, .22);
   --accent: #4f8cff;
   --accent-2: #00c2a8;
+  --accent-strong: #2d6df6;
   --danger: #ff6f7c;
   --shadow: 0 18px 60px rgba(8,13,24,.38);
+  --button-shadow: 0 10px 25px rgba(45,109,246,.25);
 }
 
 .human-theme {
@@ -691,6 +696,8 @@ label textarea { min-height: 120px; resize: vertical; }
   --border: rgba(73, 58, 39, .18);
   --accent: #ca6f3d;
   --accent-2: #4ea186;
+  --accent-strong: #b35f39;
   --danger: #c45151;
   --shadow: 0 16px 42px rgba(83,62,34,.12);
+  --button-shadow: 0 10px 25px rgba(179,95,57,.22);
 }
