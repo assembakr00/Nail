@@ -12,6 +12,11 @@
   --danger: #ff6b81;
   --shadow: 0 18px 60px rgba(0,0,0,.25);
   --button-shadow: 0 10px 25px rgba(123,112,255,.2);
+  --hero-glow-1: rgba(155,140,255,.23);
+  --hero-glow-2: rgba(94,234,212,.1);
+  --brand: #2c3dff;
+  --brand-strong: #606cff;
+  --brand-shadow: rgba(44,61,255,.2);
 }
 
 * { box-sizing: border-box; }
@@ -61,8 +66,8 @@ button { cursor: pointer; }
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(44,61,255,1), rgba(62,74,255,1));
-  box-shadow: 0 10px 20px rgba(44,61,255,.2);
+  background: linear-gradient(135deg, var(--brand), var(brand-strong));
+  box-shadow: 0 10px 20px var(--brand-shadow);
 }
 
 .brand-mark img, .orbit-core img {
@@ -85,7 +90,7 @@ button { cursor: pointer; }
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: white;
   padding: 11px 16px;
-  box-shadow: 0 10px 25px rgba(123,112,255,.2);
+  box-shadow: var(--button-shadow);
 }
 
 .primary-btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
@@ -223,9 +228,9 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   align-items: center;
   gap: 30px;
   background:
-    radial-gradient(circle at 80% 20%, rgba(155,140,255,.23), transparent 35%),
-    radial-gradient(circle at 10% 90%, rgba(94,234,212,.1), transparent 28%),
-    linear-gradient(145deg, #151b25, #0f141c);
+    radial-gradient(circle at 80% 20%, var(--hero-glow-1), transparent 35%),
+    radial-gradient(circle at 10% 90%, var(--hero-glow-1), transparent 28%),
+    linear-gradient(145deg, var(--panel-2), var(--bg));
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 34px;
@@ -264,17 +269,19 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   place-items: center;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(44,61,255,1), rgba(96,108,255,1));
+  background: linear-gradient(135deg, var(--brand), var(brand-strong));
   box-shadow: 0 0 45px rgba(155,140,255,.35);
 }
 
 .orbit-dot {
   position: absolute;
-  width: 34px; height: 34px;
+  width: 34px; 
+  height: 34px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #1a212d;
+  background: var(--panel-2);
+  color: var(--accent);
   border: 1px solid var(--border);
 }
 
@@ -700,4 +707,14 @@ label textarea { min-height: 120px; resize: vertical; }
   --danger: #c45151;
   --shadow: 0 16px 42px rgba(83,62,34,.12);
   --button-shadow: 0 10px 25px rgba(179,95,57,.22);
+  --hero-glow-1: rgba(200,111,70,.2);
+  --hero-glow-2: rgba(78,161,134,.12);
+}
+
+.human-theme .sidebar {
+  background: var(--panel);
+}
+
+.human-theme .nav-item.active {
+  background: rgba(200,111,70,.12);
 }

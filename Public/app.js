@@ -397,7 +397,7 @@ function navigate(view) {
 }
 
 function applyTheme(themeName) {
-  const themes = ["dark", "light", "pro", "human"];
+  const themes = ["dark", "light", "human"];
   const theme = themes.includes(themeName) ? themeName : "dark";
   document.body.classList.remove("light-theme", "pro-theme", "human-theme");
   if (theme === "light") document.body.classList.add("light-theme");
@@ -418,7 +418,7 @@ function applyTheme(themeName) {
 }
 
 function cycleTheme() {
-  const themes = ["dark", "light", "pro", "human"];
+  const themes = ["dark", "light", "human"];
   const current = localStorage.getItem(THEME_KEY) || "dark";
   const next = themes[(themes.indexOf(current) + 1) % themes.length];
   applyTheme(next);
