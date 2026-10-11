@@ -75,7 +75,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(publicDir, 'index.html'));
+  res.status(404).sendFile(path.join(publicDir, '404.html'));
 });
 
 app.listen(PORT, () => {

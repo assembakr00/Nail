@@ -397,28 +397,29 @@ function navigate(view) {
 }
 
 function applyTheme(themeName) {
-  const themes = ["dark", "light", "human"];
-  const theme = themes.includes(themeName) ? themeName : "dark";
-  document.body.classList.remove("light-theme", "pro-theme", "human-theme");
+  const themes = ["dark", "light", "cozy"];
+  const savedTheme = themeName === "human" ? "cozy" : themeName;
+  const theme = themes.includes(savedTheme) ? savedTheme : "dark";
+  document.body.classList.remove("light-theme", "pro-theme", "cozy-theme");
   if (theme === "light") document.body.classList.add("light-theme");
   if (theme === "pro") document.body.classList.add("pro-theme");
-  if (theme === "human") document.body.classList.add("human-theme");
+  if (theme === "cozy") document.body.classList.add("cozy-theme");
   localStorage.setItem(THEME_KEY, theme);
 
   const themeBtn = $("themeBtn");
   const labels = {
-    dark: { text: "🌙", title: "Current theme: Dark" },
-    light: { text: "☀", title: "Current theme: Light" },
-    pro: { text: "◆", title: "Current theme: Pro" },
-    human: { text: "◉", title: "Current theme: Human" }
+    dark: { icon: "assets/Nail-Moon.png", title: "Current theme: Dark" },
+    light: { icon: "assets/Nail Sun icon.png", title: "Current theme: Light" },
+    pro: { icon: "assets/Nail Sun icon.png", title: "Current theme: Pro" },
+    cozy: { icon: "assets/Nail-cozy.png", title: "Current theme: Cozy" }
   };
-  themeBtn.textContent = labels[theme].text;
+  themeBtn.innerHTML = `<img class="theme-icon" src="${labels[theme].icon}" alt="" />`;
   themeBtn.setAttribute("aria-label", labels[theme].title);
   themeBtn.title = labels[theme].title;
 }
 
 function cycleTheme() {
-  const themes = ["dark", "light", "human"];
+  const themes = ["dark", "light", "cozy"];
   const current = localStorage.getItem(THEME_KEY) || "dark";
   const next = themes[(themes.indexOf(current) + 1) % themes.length];
   applyTheme(next);
