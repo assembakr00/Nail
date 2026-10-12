@@ -253,6 +253,7 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 .active-view { display: block; }
 
 .hero-card {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -265,6 +266,31 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   border-radius: 24px;
   padding: 34px;
   box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,.08), transparent 35%),
+    radial-gradient(circle at 20% 25%, rgba(255,255,255,.06), transparent 28%),
+    linear-gradient(135deg, transparent, rgba(155,140,255,.08), transparent);
+  pointer-events: none;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  bottom: -22px;
+  width: 200px;
+  height: 200px;
+  background: url("assets/Nail-Logo\ 101.png") center/contain no-repeat;
+  opacity: 0.08;
+  filter: grayscale(1) brightness(1.6);
+  pointer-events: none;
 }
 
 .hero-card p:not(.eyebrow) {
@@ -327,10 +353,22 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 }
 
 .stat-card {
-  background: var(--panel);
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.02)), var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 115px;
+  height: 115px;
+  background: radial-gradient(circle, rgba(155,140,255,.18), transparent 68%);
+  pointer-events: none;
 }
 
 .stat-label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
@@ -351,8 +389,9 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 }
 
 .idea-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
+  position: relative;
+  background: linear-gradient(180deg, rgba(16, 18, 22, 0.72), rgba(13, 17, 25, 0.9));
+  border: none;
   border-radius: 18px;
   padding: 18px;
   min-height: 180px;
@@ -361,6 +400,23 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   flex-direction: column;
   gap: 13px;
   transition: .2s ease;
+  overflow: hidden;
+  clip-path: polygon(0% 10%, 9% 0%, 100% 0%, 100% 90%, 91% 100%, 0% 100%);
+}
+
+.idea-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("assets/Nail-idea-card-black.png") center/cover no-repeat;
+  opacity: 0.38;
+  pointer-events: none;
+  filter: saturate(1.1) contrast(1.05);
+}
+
+.idea-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .idea-card:hover { transform: translateY(-2px); border-color: rgba(155,140,255,.35); }
@@ -693,7 +749,6 @@ label textarea { min-height: 120px; resize: vertical; }
 .light-theme .icon-btn,
 .light-theme .mini-tip,
 .light-theme .stat-card,
-.light-theme .idea-card,
 .light-theme .reminder-item,
 .light-theme .ai-side-panel,
 .light-theme .ai-chat,
@@ -707,6 +762,15 @@ label textarea { min-height: 120px; resize: vertical; }
 .light-theme .ai-idea.active,
 .light-theme .undo-toast {
   background: #ffffff;
+}
+
+.light-theme .idea-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(242, 244, 248, 0.92));
+}
+
+.light-theme .idea-card::before {
+  background: url("assets/ideas-card-light.png") center/cover no-repeat;
+  opacity: 0.55;
 }
 
 .pro-theme {
@@ -747,6 +811,15 @@ label textarea { min-height: 120px; resize: vertical; }
 
 .cozy-theme .nav-item.active {
   background: rgba(200,111,70,.12);
+}
+
+.cozy-theme .idea-card {
+  background: linear-gradient(180deg, rgba(255, 249, 242, 0.78), rgba(243, 233, 221, 0.94));
+}
+
+.cozy-theme .idea-card::before {
+  background: url("assets/cozy ideas card.png") center/cover no-repeat;
+  opacity: 0.62;
 }
 
 
