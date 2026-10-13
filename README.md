@@ -18,6 +18,59 @@ Catch the idea. Nail it down. Build on it later.
 -  Edit and delete ideas
 -  Remove scheduled reminders without deleting the idea
 
+## Product direction and market research
+
+### Problem to explore
+
+People often get useful ideas while commuting, walking, working, or falling asleep. The current options are usually inconvenient or disconnected: a notes app, a voice memo, a message to yourself, a screenshot, or a paper note. Many ideas are lost because capturing them takes too much effort, and the ideas that are captured are rarely revisited.
+
+Nail is exploring a focused workflow:
+
+> Capture a rough thought quickly, develop it with AI, and remember to act on it later.
+
+This makes Nail a portfolio project first and a possible product later. The first target users are students, developers, and creative people who regularly have ideas but struggle to return to them.
+
+### Competitor and substitute review
+
+This is an initial qualitative review, recorded on October 13, 2026. It compares the problem Nail is exploring rather than claiming that Nail is better than established products.
+
+| Alternative | What it does well | Opportunity for Nail |
+| --- | --- | --- |
+| Notion | Flexible notes, documents, databases, and project organization | Offer a faster idea-capture flow with less setup |
+| Apple Notes, Google Keep, and OneNote | Quick general note capture and broad device support | Connect a rough note to AI development and a follow-up reminder |
+| Todoist and other task apps | Tasks, due dates, recurring reminders, and planning | Keep the original idea visible instead of reducing it to only a task |
+| Obsidian and other knowledge tools | Linking ideas and building a personal knowledge base | Make the first capture simple for people who do not want to design a whole system |
+| Voice memos, screenshots, paper notes, and self-messages | Available immediately and often free | Make one idea easier to save, organize, revisit, and turn into action |
+
+The main competition is not only another app. It is also the existing habit of saying, "I will remember this," and then losing the idea.
+
+### Product hypothesis
+
+Nail should not try to replace every notes, task, or knowledge-management app. Its clearer position is:
+
+> Nail helps people turn fleeting thoughts into ideas they can actually return to.
+
+The AI helper is useful for creative and developer workflows, but reminders keep the product useful even when someone does not need AI. A separate reminders product should wait until testing shows that reminders are the main reason people return.
+
+### Validation plan
+
+Before investing in paid hosting, a database, or a business model, test Nail with three to five people:
+
+1. Ask them to save a real idea without explaining every feature.
+2. Watch where they hesitate or get confused.
+3. Ask what they expected to happen after saving it.
+4. Check whether they return to the app later without being reminded.
+5. Ask what they currently use: notes, voice memos, messages, paper, or another app.
+
+Useful questions are:
+
+- What would you use Nail for?
+- What part felt slow or confusing?
+- Would you open it again next week?
+- What would make this easier than your current notes app?
+
+The first success metric is not downloads or revenue. It is whether a small group repeatedly captures and revisits ideas. If that behavior is real, Nail can later explore optional paid AI usage, advanced reminders, or other premium features.
+
 ## 🛠️ Tech stack
 
 - HTML, CSS, JavaScript
