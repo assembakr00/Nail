@@ -86,8 +86,14 @@ button { cursor: pointer; }
 }
 
 .brand-name { font-weight: 800; letter-spacing: -.02em; }
-.brand-subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.brand-name::first-letter {
+  font-size: 1.4em;
+  color: var(--accent);
+  font-weight: 900;
+  padding-right: 2px;
+}
 
+.brand-subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
 .primary-btn, .ghost-btn, .danger-btn, .text-btn, .icon-btn, .nav-item, .filter, .quick-actions button {
   border: 0;
   border-radius: 12px;
