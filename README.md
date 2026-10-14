@@ -52,6 +52,19 @@ Nail should not try to replace every notes, task, or knowledge-management app. I
 
 The AI helper is useful for creative and developer workflows, but reminders keep the product useful even when someone does not need AI. A separate reminders product should wait until testing shows that reminders are the main reason people return.
 
+### Explore ideas concept
+
+The **Explore ideas** action could eventually open a guided idea-template page instead of only showing the idea library. The page could help a rough thought become a clearer project by asking for:
+
+- The problem or opportunity
+- Who it is for
+- The main idea
+- Useful features
+- The smallest first version
+- The next action and a reminder
+
+This should be built as a later product feature after the current dashboard flow is stable. The first version can be a simple template page, with AI suggestions added after the basic workflow feels useful without AI.
+
 ### Validation plan
 
 Before investing in paid hosting, a database, or a business model, test Nail with three to five people:
@@ -173,6 +186,7 @@ The current version is a local browser demo. These are the main pieces still mis
 -  Authentication with secure sessions and user-specific authorization
 -  Login page, sign-up page, password reset, and account settings
 -  Server-side idea and reminder CRUD endpoints instead of localStorage-only persistence
+-  Guided Explore Ideas template page for turning rough thoughts into project plans
 -  Custom 404 page plus consistent 4xx/5xx error pages
 -  Real scheduled notifications and reminder delivery
 -  Input validation, rate limits, logging, monitoring, automated tests, and deployment configuration

@@ -610,7 +610,12 @@ $("aiInput").addEventListener("keydown", (e) => {
 });
 
 $("clearCompletedBtn").addEventListener("click", () => {
-  ideas = ideas.filter(i => !i.completed);
+  ideas.forEach(idea => {
+    if (!idea.completed || !idea.reminder) return;
+    idea.reminder = "";
+    idea.completed = false;
+    idea.alertedAt = "";
+  });
   saveIdeas();
   updateStats();
   renderReminders();
