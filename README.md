@@ -23,6 +23,8 @@ Catch the idea. Nail it down. Build on it later.
 ### Problem to explore
 
 People often get useful ideas while commuting, walking, working, or falling asleep. The current options are usually inconvenient or disconnected: a notes app, a voice memo, a message to yourself, a screenshot, or a paper note. Many ideas are lost because capturing them takes too much effort, and the ideas that are captured are rarely revisited.
+and
+People often get useful ideas during ordinary parts of the day, but those thoughts are easy to lose or forget. Existing tools can store notes, but capturing an idea, developing it, and remembering to return to it are often separate activities. Nail is exploring how to connect those parts without making the user maintain a complicated system.
 
 Nail is exploring a focused workflow:
 
@@ -64,6 +66,13 @@ The **Explore ideas** action could eventually open a guided idea-template page i
 - The next action and a reminder
 
 This should be built as a later product feature after the current dashboard flow is stable. The first version can be a simple template page, with AI suggestions added after the basic workflow feels useful without AI.
+
+### Recent UX work
+
+- Added an `Other` category filter so every category available in the idea form can also be filtered in the Ideas view.
+- Made the entire Quick Thought sidebar card open the idea-creation modal, rather than requiring the user to click a small link.
+- Fixed the completed-reminder action so it removes reminder data without deleting the idea itself.
+- Renamed the bulk action to `Clear completed reminders` so its behavior is explicit.
 
 ### Validation plan
 

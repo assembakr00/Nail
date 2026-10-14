@@ -168,12 +168,15 @@ button { cursor: pointer; }
 .sidebar-bottom { margin-top: auto; display: grid; gap: 12px; }
 
 .mini-tip {
+  width: 100%;
   display: flex;
   gap: 10px;
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--panel);
+  color: var(--text);
+  text-align: left;
 }
 
 .mini-tip span { font-size: 18px; }

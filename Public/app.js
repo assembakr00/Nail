@@ -567,6 +567,7 @@ document.querySelectorAll(".nav-item[data-view], [data-view]").forEach(btn => {
 });
 
 $("openIdeaBtn").addEventListener("click", openModal);
+$("quickThoughtBtn").addEventListener("click", openModal);
 $("heroSaveBtn").addEventListener("click", openModal);
 $("ideasSaveBtn").addEventListener("click", openModal);
 $("closeModal").addEventListener("click", closeModal);

@@ -34,13 +34,13 @@
       </nav>
 
       <div class="sidebar-bottom">
-        <div class="mini-tip">
+        <button class="mini-tip" id="quickThoughtBtn" type="button">
           <span>💡</span>
           <div>
             <strong>Quick thought?</strong>
             <p>Save it before it disappears.</p>
           </div>
-        </div>
+        </button>
         <button class="nav-item" data-view="settings"><span>⚙</span> Settings</button>
       </div>
     </aside>
@@ -138,6 +138,7 @@
           <button class="filter" data-filter="Learning">Learning</button>
           <button class="filter" data-filter="Technology">Technology</button>
           <button class="filter" data-filter="Creative">Creative</button>
+          <button class="filter" data-filter="Other">Other</button>
         </div>
         <div id="allIdeas" class="idea-grid"></div>
       </section>
@@ -203,7 +204,7 @@
         <div class="settings-card">
           <div>
             <strong>Demo data</strong>
-            <p>Reset the local ideas in this frontend demo.</p>
+            <p>Reset the local ideas in this frontend demo to the og demo state with placeholder ideas.</p>
           </div>
           <button class="danger-btn" id="resetBtn">Reset demo</button>
         </div>
