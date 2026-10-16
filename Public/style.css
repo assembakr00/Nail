@@ -78,7 +78,7 @@ button { cursor: pointer; }
   box-shadow: 0 10px 20px var(--brand-shadow);
 }
 
-.brand-mark img, .orbit-core img {
+.brand-mark img {
   width: 100%;
   height: 100%;
   display: block;
@@ -264,9 +264,53 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 .hero-card {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: 30px;
+  min-height: 260px;
+  margin-bottom: 110px;
+  padding: 34px;
+  background: transparent;
+}
+
+.hero-art {
+  position: absolute;
+  top: -10px;
+  left: -12px;
+  width: calc(100% + 70px);
+  height: calc(100% + 120px);
+  object-fit: fill;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+}
+
+.hero-card p:not(.eyebrow) {
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+.hero-card h2 {
+  max-width: 560px;
+  font-size: clamp(26px, 3vw, 32px);
+}
+
+.hero-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+
+.inspo-card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  margin: 16px 0 30px;
+  padding: 20px 28px;
   background:
     radial-gradient(circle at 80% 20%, var(--hero-glow-1), transparent 35%),
     radial-gradient(circle at 10% 90%, var(--hero-glow-1), transparent 28%),
@@ -278,81 +322,14 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   overflow: hidden;
 }
 
-.hero-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(120deg, rgba(255,255,255,.08), transparent 35%),
-    radial-gradient(circle at 20% 25%, rgba(255,255,255,.06), transparent 28%),
-    linear-gradient(135deg, transparent, rgba(155,140,255,.08), transparent);
-  pointer-events: none;
-}
-
-.hero-card::after {
-  content: "";
-  position: absolute;
-  right: -18px;
-  bottom: -22px;
-  width: 200px;
-  height: 200px;
-  background: url("assets/Nail-Logo\ 101.png") center/contain no-repeat;
-  opacity: 0.08;
-  filter: grayscale(1) brightness(1.6);
-  pointer-events: none;
-}
-
-.hero-card p:not(.eyebrow) {
-  color: var(--muted);
-  max-width: 650px;
-  line-height: 1.7;
-}
-
-.hero-actions { display: flex; gap: 10px; margin-top: 20px; }
-
-.hero-orbit {
-  width: 180px;
-  height: 180px;
-  position: relative;
-  flex: 0 0 auto;
-}
-
-.hero-orbit::before, .hero-orbit::after {
-  content: "";
-  position: absolute;
-  inset: 17px;
-  border: 1px dashed rgba(255,255,255,.12);
-  border-radius: 50%;
-}
-
-.hero-orbit::after { inset: 40px; }
-
-.orbit-core {
-  position: absolute;
-  inset: 58px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--brand), var(--brand-strong));
-  box-shadow: 0 0 45px rgba(155,140,255,.35);
-}
-
-.orbit-dot {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--panel-2);
+#inspo {
+  max-width: 700px;
+  margin: 0;
   color: var(--accent);
-  border: 1px solid var(--border);
+  text-align: center;
+  line-height: 1.6;
 }
 
-.dot-1 { top: 1px; left: 73px; }
-.dot-2 { right: 6px; top: 74px; }
-.dot-3 { bottom: 4px; left: 72px; }
 
 .stat-grid {
   display: grid;
@@ -715,7 +692,6 @@ label textarea { min-height: 120px; resize: vertical; }
   .top-actions { width:100%; }
   .search { flex:1; width:auto; }
   .hero-card { padding:24px; }
-  .hero-orbit { display:none; }
   .stat-grid { grid-template-columns: 1fr; }
   .idea-grid { grid-template-columns: 1fr; }
   .ai-workspace { grid-template-columns: 1fr; }
@@ -734,14 +710,6 @@ label textarea { min-height: 120px; resize: vertical; }
 }
 
 .light-theme .sidebar {
-  background: #ffffff;
-}
-
-.light-theme .hero-card {
-  background: #ffffff;
-}
-
-.light-theme .orbit-dot {
   background: #ffffff;
 }
 

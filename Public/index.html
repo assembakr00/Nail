@@ -63,22 +63,15 @@
 
       <section id="dashboardView" class="view active-view">
         <div class="hero-card">
-          <div>
-            <p class="eyebrow">NAIL</p>
+          <img class="hero-art" src="assets/Nail-hero-card-asprite.png" alt="" aria-hidden="true" />
+          <div class="hero-content">
+            <p class="accent">NAIL</p>
             <h2>Never lose a good idea again.</h2>
             <p>Capture ideas quickly, set a reminder, and use your AI helper to turn thoughts into something bigger.</p>
             <div class="hero-actions">
               <button class="primary-btn" id="heroSaveBtn">＋ Save an idea</button>
               <button class="ghost-btn" data-view="ideas">Explore ideas →</button>
             </div>
-          </div>
-          <div class="hero-orbit">
-            <div class="orbit-core">
-              <img src="assets/Nail-Logo 101.png" alt="Nail logo" />
-            </div>
-            <span class="orbit-dot dot-1">✦</span>
-            <span class="orbit-dot dot-2">◷</span>
-            <span class="orbit-dot dot-3">✧</span>
           </div>
         </div>
 
@@ -96,6 +89,12 @@
             <strong id="statPinned">0</strong>
           </div>
         </div>
+
+          <div class="inspo-card">
+            <p id="inspo">
+              “Shoot for the sun. Even if you fail, you’ll end up among the stars.”
+            </p>
+          </div>
 
         <div class="section-heading">
           <div>
@@ -204,7 +203,7 @@
         <div class="settings-card">
           <div>
             <strong>Demo data</strong>
-            <p>Reset the local ideas in this frontend demo to the og demo state with placeholder ideas.</p>
+            <p>Reset the local data in this frontend demo to the og demo state with placeholder ideas.</p>
           </div>
           <button class="danger-btn" id="resetBtn">Reset demo</button>
         </div>
