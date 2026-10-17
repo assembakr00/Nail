@@ -25,6 +25,7 @@
   --brand: #2c3dff;
   --brand-strong: #606cff;
   --brand-shadow: rgba(44,61,255,.2);
+  --idea-card-surface: rgba(13, 17, 25, .9);
 }
 
 * { box-sizing: border-box; }
@@ -329,9 +330,11 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   z-index: 1;
   max-width: 700px;
   margin: 0;
-  color: var(--accent);
+  color: #fff8e8;
+  font-weight: 700;
   text-align: center;
   line-height: 1.6;
+  text-shadow: 1px 2px 0 rgba(0, 0, 0, .45);
 }
 
 
@@ -380,7 +383,7 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 
 .idea-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(16, 18, 22, 0.72), rgba(13, 17, 25, 0.9));
+  background: var(--idea-card-surface);
   border: none;
   border-radius: 18px;
   padding: 18px;
@@ -394,14 +397,14 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   clip-path: polygon(0% 10%, 9% 0%, 100% 0%, 100% 90%, 91% 100%, 0% 100%);
 }
 
-.idea-card::before {
-  content: "";
+.idea-art {
   position: absolute;
   inset: 0;
-  background: url("assets/Nail-idea-card-black.png") center/cover no-repeat;
-  opacity: 0.38;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  image-rendering: pixelated;
   pointer-events: none;
-  filter: saturate(1.1) contrast(1.05);
 }
 
 .idea-card > * {
@@ -409,18 +412,23 @@ h4 { font-size: 16px; margin-bottom: 6px; }
   z-index: 1;
 }
 
+.idea-card > .idea-art {
+  position: absolute;
+  z-index: 0;
+}
+
 .idea-card:hover { transform: translateY(-2px); border-color: rgba(155,140,255,.35); }
 
 .idea-card-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; min-width: 0; }
 .idea-card-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-.idea-title { min-width: 0; font-weight: 750; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+.idea-title { min-width: 0; color: #fff3d6; font-weight: 750; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; text-shadow: 1px 2px 0 rgba(0, 0, 0, .42); }
 .pin-btn { background: transparent; border: 0; color: var(--muted); font-size: 17px; }
 .pin-btn.active { color: #ffd36d; }
 .card-action { border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--muted); padding: 4px 7px; font-size: 10px; }
 .card-action:hover { color: var(--text); background: var(--panel-2); }
 .delete-action { color: var(--danger); }
 
-.idea-desc { min-width: 0; color: var(--muted); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; word-break: break-word; }
+.idea-desc { min-width: 0; color: rgba(255, 243, 214, .82); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; word-break: break-word; text-shadow: 1px 1px 0 rgba(0, 0, 0, .35); }
 
 .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
 .badge {
@@ -436,7 +444,7 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 .idea-meta {
   display: flex;
   justify-content: space-between;
-  color: #687180;
+  color: rgba(255, 243, 214, .7);
   font-size: 10px;
 }
 
@@ -481,7 +489,8 @@ h4 { font-size: 16px; margin-bottom: 6px; }
 }
 
 .ai-copy { flex: 1; }
-.ai-banner p { color: var(--muted); margin: 0; font-size: 13px; line-height: 1.5; }
+.ai-banner h4 { color: #fff3d6; text-shadow: 1px 2px 0 rgba(0, 0, 0, .42); }
+.ai-banner p { color: rgba(255, 243, 214, .82); margin: 0; font-size: 13px; line-height: 1.5; text-shadow: 1px 1px 0 rgba(0, 0, 0, .35); }
 
 .inspo-art,
 .ai-art {
@@ -731,6 +740,7 @@ label textarea { min-height: 120px; resize: vertical; }
   --muted: #687387;
   --border: rgba(8, 9, 14, 0.09);
   --button-shadow: 0 10px 25px rgba(87,79,232,.18);
+  --idea-card-surface: rgba(242, 244, 248, .92);
   --accent: #e4e00f;
   --accent-2: #c29e00;
 }
@@ -767,13 +777,11 @@ label textarea { min-height: 120px; resize: vertical; }
   background: #ffffff;
 }
 
-.light-theme .idea-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(242, 244, 248, 0.92));
-}
-
-.light-theme .idea-card::before {
-  background: url("assets/ideas-card-light.png") center/cover no-repeat;
-  opacity: 0.55;
+.light-theme .idea-title,
+.light-theme .idea-desc,
+.light-theme .idea-meta {
+  color: #26313d;
+  text-shadow: none;
 }
 
 .pro-theme {
@@ -806,6 +814,7 @@ label textarea { min-height: 120px; resize: vertical; }
   --button-shadow: 0 10px 25px rgba(179,95,57,.22);
   --hero-glow-1: rgba(200,111,70,.2);
   --hero-glow-2: rgba(78,161,134,.12);
+  --idea-card-surface: rgba(243, 233, 221, .94);
 }
 
 .cozy-theme .sidebar {
@@ -816,13 +825,11 @@ label textarea { min-height: 120px; resize: vertical; }
   background: rgba(200,111,70,.12);
 }
 
-.cozy-theme .idea-card {
-  background: linear-gradient(180deg, rgba(255, 249, 242, 0.78), rgba(243, 233, 221, 0.94));
-}
-
-.cozy-theme .idea-card::before {
-  background: url("assets/cozy ideas card.png") center/cover no-repeat;
-  opacity: 0.62;
+.cozy-theme .idea-title,
+.cozy-theme .idea-desc,
+.cozy-theme .idea-meta {
+  color: #3b2a20;
+  text-shadow: none;
 }
 
 

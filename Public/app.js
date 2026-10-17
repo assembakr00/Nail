@@ -1,6 +1,11 @@
 const STORAGE_KEY = "nail_demo_ideas_v1";
 const THEME_KEY = "nail_theme_v1";
 const REMINDER_CHECK_INTERVAL_MS = 30000;
+const IDEA_CARD_ART = {
+  dark: "assets/Nail-idea-card-black.png",
+  light: "assets/ideas-card-light.png",
+  cozy: "assets/cozy ideas card.png"
+};
 
 const seedIdeas = [
   {
@@ -193,10 +198,13 @@ function checkDueReminders() {
 }
 
 function ideaCard(idea) {
+  const theme = localStorage.getItem(THEME_KEY) || "dark";
+  const ideaArt = IDEA_CARD_ART[theme] || IDEA_CARD_ART.dark;
   const tags = (idea.tags || []).slice(0, 3).map(t => `<span class="badge">#${escapeHtml(t)}</span>`).join("");
   const reminder = idea.reminder ? `<span class="badge reminder">◷ ${escapeHtml(formatReminder(idea.reminder))}</span>` : "";
   return `
     <article class="idea-card">
+      <img class="idea-art" src="${ideaArt}" alt="" aria-hidden="true" />
       <div class="idea-card-header">
         <div class="idea-title">${escapeHtml(idea.title)}</div>
         <div class="idea-card-actions">
@@ -423,6 +431,7 @@ function cycleTheme() {
   const current = localStorage.getItem(THEME_KEY) || "dark";
   const next = themes[(themes.indexOf(current) + 1) % themes.length];
   applyTheme(next);
+  renderIdeas();
 }
 
 function openModal() {
