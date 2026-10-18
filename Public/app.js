@@ -2,8 +2,8 @@ const STORAGE_KEY = "nail_demo_ideas_v1";
 const THEME_KEY = "nail_theme_v1";
 const REMINDER_CHECK_INTERVAL_MS = 30000;
 const IDEA_CARD_ART = {
-  dark: "assets/Nail-idea-card-black.png",
-  light: "assets/ideas-card-light.png",
+  dark: "assets/cozy ideas card.png",
+  light: "assets/cozy ideas card.png",
   cozy: "assets/cozy ideas card.png"
 };
 
@@ -231,7 +231,15 @@ function renderIdeas() {
 
   $("allIdeas").innerHTML = filtered.length
     ? filtered.map(ideaCard).join("")
-    : `<div class="empty-state">No ideas match your search.</div>`;
+    : `
+      <div class="empty-state">
+        <img class="empty-illustration" src="assets/No-ideas icon.png" alt="" aria-hidden="true" />
+        <div class="empty-copy">
+          <strong>No ideas match your search.</strong>
+          <span>Save a new idea and it will show up here.</span>
+        </div>
+      </div>
+    `;
 
   const recentPool = query
     ? ideas.filter(i => `${i.title} ${i.description} ${(i.tags || []).join(" ")}`.toLowerCase().includes(query))
@@ -239,7 +247,15 @@ function renderIdeas() {
   const recent = [...recentPool].sort((a,b) => new Date(b.createdAt)-new Date(a.createdAt)).slice(0, 3);
   $("recentIdeas").innerHTML = recent.length
     ? recent.map(ideaCard).join("")
-    : `<div class="empty-state">Save your first idea to see it here.</div>`;
+    : `
+      <div class="empty-state">
+        <img class="empty-illustration" src="assets/No-ideas icon.png" alt="" aria-hidden="true" />
+        <div class="empty-copy">
+          <strong>Save your first idea.</strong>
+          <span>Your newest ideas will appear here.</span>
+        </div>
+      </div>
+    `;
 
   bindIdeaCardActions();
 }
@@ -349,7 +365,15 @@ function renderReminders() {
         <button class="card-action delete-action" data-remove-reminder="${idea.id}" title="Remove reminder" aria-label="Remove reminder">Remove</button>
       </div>
     `).join("")
-    : `<div class="empty-state">No reminders yet. Add one when you save an idea.</div>`;
+    : `
+      <div class="empty-state">
+        <img class="empty-illustration" src="assets/No-ideas icon.png" alt="" aria-hidden="true" />
+        <div class="empty-copy">
+          <strong>No reminders yet.</strong>
+          <span>Add one when you save an idea.</span>
+        </div>
+      </div>
+    `;
 
   document.querySelectorAll("[data-complete]").forEach(btn => {
     btn.addEventListener("click", () => {
