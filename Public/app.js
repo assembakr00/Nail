@@ -1,3 +1,4 @@
+// core app state + local storage keys
 const STORAGE_KEY = "nail_demo_ideas_v1";
 const THEME_KEY = "nail_theme_v1";
 const REMINDER_CHECK_INTERVAL_MS = 30000;
@@ -51,8 +52,10 @@ let activeView = "dashboard";
 let lastUndo = null;
 let undoTimer = null;
 
+// quick DOM grabber, because typing document.getElementById every 2 sec is annoying
 const $ = (id) => document.getElementById(id);
 
+// local storage stuff + seed data
 function loadIdeas() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -97,6 +100,7 @@ function escapeHtml(value) {
   }[m]));
 }
 
+// dashboard counters, lil vibe check for the stat cards
 function updateStats() {
   $("statIdeas").textContent = ideas.length;
   $("statReminders").textContent = ideas.filter(i => i.reminder && !i.completed).length;
@@ -197,6 +201,7 @@ function checkDueReminders() {
   renderReminders();
 }
 
+// card render zone: idea cards + filters + recent stuff
 function ideaCard(idea) {
   const theme = localStorage.getItem(THEME_KEY) || "dark";
   const ideaArt = IDEA_CARD_ART[theme] || IDEA_CARD_ART.dark;
@@ -222,6 +227,7 @@ function ideaCard(idea) {
     </article>`;
 }
 
+// main idea list logic, filtered + searched + sorted
 function renderIdeas() {
   const query = $("globalSearch").value.trim().toLowerCase();
   const filtered = ideas
@@ -260,6 +266,7 @@ function renderIdeas() {
   bindIdeaCardActions();
 }
 
+// click handlers for card actions, cause the cards need to do stuff too
 function bindIdeaCardActions() {
   document.querySelectorAll("[data-pin]").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -348,6 +355,7 @@ function removeReminder(id) {
   });
 }
 
+// reminder list + completed state stuff
 function renderReminders() {
   const list = ideas
     .filter(i => i.reminder)

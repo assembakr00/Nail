@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
+// server boot + static files, pretty basic but works
 const app = express();
 const PORT = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, '..', 'Public');
@@ -10,6 +11,8 @@ const publicDir = path.join(__dirname, '..', 'Public');
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(publicDir));
+
+// health check for quick sanity vibes
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -19,6 +22,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// main AI route: sends the user prompt + idea context to OpenAI
 app.post('/api/chat', async (req, res) => {
   const { prompt, action, ideaTitle, ideaDescription } = req.body || {};
   const finalPrompt = prompt || `Help me think through this idea: ${ideaTitle || 'general idea'}\n${ideaDescription || ''}`;
@@ -74,10 +78,12 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// fallback route, in case someone types a bad URL
 app.get('*', (req, res) => {
   res.status(404).sendFile(path.join(publicDir, '404.html'));
 });
 
+// start the app and log the local URL
 app.listen(PORT, () => {
   console.log(`Nail app running at http://localhost:${PORT}`);
 });
